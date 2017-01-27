@@ -1,0 +1,18 @@
+{
+  "name": "ToDOAPP",
+  "version": "1.0.0",
+  "description": "Simple Todo App for SOFE 3980",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . ToDo --platform=win32 --arch=all --ignore=node_modules/electron-* --version=1.0.0 --icon=assets/img/logo.png.icns --out=build/"
+  },
+  "author": "Mahesh Ranaweera",
+  "license": "ISC",
+  "devDependencies": {
+    "asar": "^0.11.0",
+    "electron": "^1.4.15",
+    "electron-packager": "^7.0.3",
+    "electron-prebuilt": "^1.2.1"
+  }
+}
