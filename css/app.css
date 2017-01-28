@@ -11,6 +11,13 @@
 
 #app-content {
     width: 100%;
+    max-width: 1200px;
+    position: fixed;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 0;
     height: 100%;
     padding-top: 50px;
     padding-left:  50px;
@@ -31,7 +38,7 @@
 }
 
 .todo {
-    width: 300px;
+    width: 356px;
     height: auto;
     float: left;
     padding: 5px;
@@ -67,7 +74,7 @@
 
 .todo-footer {
     width: 100%;
-    height: 32px;
+    height: auto;
     float: left;
     border-top: 1px solid #eee; 
 }
@@ -84,7 +91,7 @@
 
 #app-todoadd {
     width: 400px;
-    height: 400px;;
+    height: 450px;
     padding: 5px;
     border-radius: 2px;
     position: absolute;
@@ -92,10 +99,10 @@
     background-color: white;
     box-sizing: border-box;
     z-index: 800;
-    top: 0;
-    bottom: 0;
+    top: 100px;
     left: 0;
     right: 0;
+    display: none;
 }
 
 #app-darkbg {
@@ -104,4 +111,134 @@
     position: fixed;
     background-color: rgba(0,0,0,0.5);
     z-index: 700;
+    display: none;
+}
+
+.exitbtn {
+    width: 40px;
+    height: 40px;
+    float: right;
+    line-height: 40px;
+    text-align: center;
+    color: #2c3e50;
+    cursor: pointer;
+}
+.exitbtn:hover{
+    color: #34495e;
+}
+
+.todo-input {
+    width: 100%;
+    height: 32px;
+    border-style: none;
+    text-indent: 10px;
+    box-sizing: border-box;
+    outline: none;
+    color: #34495e;
+}
+
+.todo-label {
+    text-indent: 10px;
+    line-height: 20px;
+    font-size: 12px;
+    float: left;
+    width: 100%;
+}
+
+.todo-textarea {
+    max-width: 100%;
+    width: 100%;
+    max-height: 50px;
+    border-style: none;
+    box-sizing: border-box;
+    line-height: 20px;
+    outline: none;
+    text-indent: 10px;
+    font-size: 12px;
+    color: #34495e;
+}
+
+.todo-btn {
+    width: auto;
+    height: 32px;
+    margin: 10px;
+    background: #3498db;
+    border-style: none;
+    border-style: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.input-btn {
+    width: auto;
+    height: 32px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 10px;
+    border-radius: 2px;
+    border-style: none;
+    background-color: #3498db;
+    color: #ecf0f1;
+    cursor: pointer;
+}
+.input-btn:hover{
+    background-color: #2980b9;
+}
+
+.todo-checkbox {
+    margin: 10px;
+}
+
+.width-50 {
+    width: 50%;
+    float: left;
+}
+
+#todo-add-btn {
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #2196f3;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    color: #ecf0f1;
+    cursor: pointer;
+    z-index: 500;
+    -webkit-box-shadow: 0px 0px 16px 0px rgba(44,62,80,1);
+-moz-box-shadow: 0px 0px 16px 0px rgba(44,62,80,1);
+box-shadow: 0px 0px 16px 0px rgba(44,62,80,1);
+}
+
+#todo-add-btn:hover{
+    -webkit-box-shadow: 0px 5px 16px 0px rgba(44,62,80,1);
+-moz-box-shadow: 0px 5px 16px 0px rgba(44,62,80,1);
+box-shadow: 0px 5px 16px 0px rgba(44,62,80,1);
+}
+
+
+.todo-footer-icons {
+    width: 32px;
+    height: 32px;
+    float: left;
+    line-height: 32px;
+    text-align: center;
+    color:  #34495e;
+}
+
+.todo-footer-icon-lbl {
+    width: auto;
+    height: 32px;
+    float: left;
+    line-height: 32px;
+    padding-right: 5px;
+    color:  #34495e;
+}
+
+.todo-footer-block {
+    width: 50%;
+    height: 32px;
+    float: left;
 }
