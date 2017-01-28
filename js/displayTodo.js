@@ -4,7 +4,7 @@ function displayTodo() {
         //get info from the db
         db.transaction(function(t) {
             // display data from the db
-            t.executeSql("SELECT * FROM todotb ", [], refreshTodo);
+            t.executeSql("SELECT * FROM todotb ", [], refreshTodo());
         });
     } else {
         alert("Something went wrong!");

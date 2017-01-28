@@ -46,14 +46,14 @@ a.hover {
 
 /* scroll bar =========================*/
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 2px;
     background-color: rgba(238, 238, 238, 0.1);
 }
 ::-webkit-scrollbar-track {
-    width: 5px;
+    width: 2px;
 }
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(53, 92, 125, 0.5);
+    background-color: #2196f3;
 }
 ::-webkit-scrollbar-track-piece {
     background-color: rgba(238, 238, 238, 0.1);

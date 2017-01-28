@@ -15,14 +15,15 @@ function addTODO() {
         //debug point for output testing
         /*
         var test = document.getElementById("test");
-        test.innerHTML = todo_heading + " " + todo_desc; */
+        test.innerHTML = todo_heading + " " + todo_desc; 
+        */
 
         //check for header is available
         if (todo_heading != '') {
             db.transaction(function(t) {
                 //insert the new todo entry into the database
                 t.executeSql("INSERT INTO todo_db (heading, desc, sdate, stime, edate, etime, allday, tag) \
-                      VALUES (?,?,?,?,?,?,?)", [todo_heading, todo_desc, todo_sdate, todo_stime, todo_edate, todo_etime, todo_allday, todo_tag]);
+                      VALUES (?,?,?,?,?,?,?,?)", [todo_heading, todo_desc, todo_sdate, todo_stime, todo_edate, todo_etime, todo_allday, todo_tag]);
                 console.log("NEW TODO ENTRY");
             });
         } else {

@@ -1,109 +1,233 @@
-//open the database connection
+//connect the websql db
+if (window.openDatabase) {
+    var db = openDatabase("todo_db", "0.1", "todo_entry", 2 * 1024 * 1024);
 
-if(window.openDatabase){
-    //create the database for the todo
-    // required fields are Date, Task, Description, and Tag : database size> 2*1024*1024 = 2MB
-    var db = openDatabase("tododb","0.1","todo_database", 2*1024*1024);
-    
-    db.transaction(function(t){
-        t.executeSql("CREATE TABLE IF NOT EXISTS todotb (idtodo INTEGER PRIMARY KEY ASC, date TEXT, task TEXT, desc TEXT, tag TEXT)");
+    //start transactions
+    db.transaction(function(t) {
+        t.executeSql("CREATE TABLE IF NOT EXISTS todo_db( \
+                  todoID INTEGER PRIMARY KEY AUTOINCREMENT, \
+                  heading   TEXT, \
+                  desc      TEXT, \
+                  sdate     TEXT, \
+                  stime     TEXT, \
+                  edate     TEXT, \
+                  etime     TEXT, \
+                  allday    TEXT, \
+                  tag       TEXT \
+                )");
         
-        //test query
-        //t.executeSql("INSERT INTO todotb (date, task, desc, tag) VALUES (2016, games, description, tag)");
+        console.log("DB CREATED");
+
+        //debug point for websql testing
+        /*
+        t.executeSql("INSERT INTO todo_db (heading, desc, sdate, stime, edate, etime, allday, tag) \
+                      VALUES ('test','test','test','test','test','test','test','test')");
+        console.log("TEST DB CREATED");
+        */
     });
-}
-else{
-    alert("Something went wrong!");
+} else {
+    console.log("DB ERROR OCCURED");
 }
 
-//add items to todo list
-function addTodo(){
-    //check status of db is available
-    if(db){
-        //get info from the input panel
-        var date  = document.getElementById("date_txt").value;
-        var task  = document.getElementById("task_txt").value;
-        var desc  = document.getElementById("desc_txt").value;
-        var tag   = document.getElementById("tag_txt").value;
-        
-        //check weather data is entered into the inputs
-        if (date != "" && task != "" && desc !="" && tag != ""){
-            
-            //enter the values into the db
-            db.transaction(function(t){
-                t.executeSql("INSERT INTO todotb (date, task, desc, tag) VALUES (?, ?, ?, ?)", [date, task, desc, tag]);
+
+//Add todo items
+function addTODO() {
+    //check database connection
+    if (db) {
+        //get input data from the submit form
+        var todo_heading = document.getElementById("todo-header").value;
+        var todo_desc       = document.getElementById("todo-desc").value;
+        var todo_sdate = document.getElementById("todo-sdate").value;
+        var todo_stime = document.getElementById("todo-stime").value;
+        var todo_edate = document.getElementById("todo-edate").value;
+        var todo_etime = document.getElementById("todo-etime").value;
+        var todo_allday = document.getElementById("todo-allday").value;
+        var todo_tag = document.getElementById("todo-tag").value;
+
+        //debug point for output testing
+        /*
+        var test = document.getElementById("test");
+        test.innerHTML = todo_heading + " " + todo_desc; 
+        */
+
+        //check for header is available
+        if (todo_heading != '' && todo_sdate != '') {
+            db.transaction(function(t) {
+                //insert the new todo entry into the database
+                t.executeSql("INSERT INTO todo_db (heading, desc, sdate, stime, edate, etime, allday, tag) \
+                              VALUES (?,?,?,?,?,?,?,?)", 
+                              [todo_heading, todo_desc, todo_sdate, todo_stime, todo_edate, todo_etime, todo_allday, todo_tag]
+                            );
                 
-                //close the input panel
-                visibleOFF();
+                console.log("NEW TODO ENTRY");
+                
+                //close the addtodo window and refresh the todolist
+                exitBtn("app-todoadd");
                 displayTodo();
             });
+        } else {
+            alert("YOU NEED TO HAVE A HEADING AND A START DATE");
+            console.log("INCOMPLETE SUBMIT")
         }
-        else{
-            alert("You have to fill all the blanks");
-        }
-    }
-    else{
-        alert("Something went wrong!");
     }
 }
 
 //display todo list
-function displayTodo(){
-    //check status of db is available
-    if(db){
-        //get info from the db
-        db.transaction(function(t){
-            // * means select all from the given table
-            t.executeSql("SELECT * FROM todotb ", [], refreshTodo);
+function displayTodo() {
+    if (db) {
+        db.transaction(function(t) {
+            // display data from the db
+            t.executeSql("SELECT * FROM todo_db \
+                          ORDER BY sdate ASC", [], refreshTodo);
         });
-    }
-    else{
-        alert("Something went wrong!");
+    } else {
+        console.log("LIST DISPLAY ERROR")
     }
 }
 
-//refresh the todolist: after add and delete item
-function refreshTodo(transaction, results){
-    var todoTask = "";
-    var todoList = document.getElementById("card_center_wrapper");
+//refresh the todo list
+function refreshTodo(transaction, results) {
+    var todoList = document.getElementById("app-content");
+    var todoTask = '';
+    //delcaring todo html snippets
+    var cardHead = '<div class="todo-wrapper"><div class="todo">';
+    var cardFoot = '</div></div>';
     
+    //clear the todolist
     todoList.innerHTML = "";
     
-    //id the table is emplty
-    if(results.rows.length == 0){
-        todoList.innerHTML = "<div id='lonelymsg'></div>";
-    }
-    else{
-            for(var i = 0; i < results.rows.length; i++){
-            //info from each row
-            var todoRow = results.rows.item(i);
 
-            //get the date and remove each content as year, month and date
-            var dateEntry = todoRow.date;
+    //if data table is empty
+    if (results.rows.length == 0) {
+        todoList.innerHTML = "EMPTY";
+        console.log("DB EMPTY");
+    } else {
+        for (var i = 0; i < results.rows.length; i++) {
+            var todoRaw = results.rows.item(i);
+
+             //debug point for checking retrieve data
+            /*
+            todoList.innerHTML += todoRaw.heading;
+            */
+            todoTask = ''; 
+            todoTask = '<div class="todo-wrapper"><div class="todo"><div class="todo-header"><div class="ring"></div>'+todoRaw.heading+'</div>';
             
-            /* reserved for future dev
-            var arrayDate = dateEntry.split("-");
+            if(todoRaw.desc != ''){
+                todoTask += '<div class="todo-content-blocks">' + todoRaw.desc + '</div>';
+            }
+            
+            //todo footer
+            todoTask += '<div class="todo-footer">';
+            
+            if(todoRaw.sdate != null){
+                todoTask += '<div class="todo-footer-block width-100"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i></div><div class="todo-footer-icon-lbl">' + todoRaw.sdate + todoRaw.stime;
+                if(todoRaw.stime != ''){
+                    todoTask += ' @ ' + todoRaw.stime;
+                }
+                todoTask += '</div></div>';
+            }
+            /*
+            if(todoRaw.edate != ''){
+                //todoTask
+            }
+            if(todoRaw.etime != ''){
+                //todoTask
+            }
+            if(todoRaw.allday != ''){
+                //todoTask
+            }
+            if(todoRaw.tag != ''){
+                //todoTask
+            } 
+            */
+            
+            //delete button
+            //todoTask += '<div class="todo-footer-block"><div class="todo-footer-icons"><a href="javascript:void(0);" onclick="removeTodo(' + todoRow.idtodo + ');"><i class="fa fa-trash-o" aria-hidden="true"></i></a></div></div>';
+            
+            //todo footer end
+            todoTask += '</div>';
+            
+            todoTask += '</div></div>';
+            
+            todoList.innerHTML += todoTask;
+            
+            
+            /*
+                                            <div class="todo-header"> \
+                                                <div class="ring"></div>'+todoRaw.heading+' \
+                                            </div> \
+                                            <div class="todo-content-blocks">Content</div> \
+                                            <div class="todo-footer"></div> \
+                                        </div> \
+                                    </div>';  */
+            
+            
+            /*
+            todoList.innerHTML += cardHead+'<div class="todo-header"><div class="ring"></div>'+todoRaw.heading+'</div>';
+            
+            if(todoRaw.desc != null){
+                todoList.innerHTML += '<div class="todo-content-blocks">' + todoRaw.desc + '</div>';
+            }
+            
+            todoList.innerHTML += '<div class="todo-footer"></div>';
+            
+            todoList.innerHTML += cardFoot; */
+            
+            /*
+            
+                <div class="todo-content-blocks">Content</div> \
+                <div class="todo-footer"></div>'+cardFoot;
+            
+            */
+            
+            
+            
+            
+            /*
+            if(todoRaw.sdate != null){
+                todoList.innerHTML += '<div class="todo-footer-block width-100"> \
+                                            <div class="todo-footer-icons"> \
+                                                <i class="fa fa-clock-o" aria-hidden="true"></i> \
+                                            </div> \
+                                            <div class="todo-footer-icon-lbl">' + todoRaw.sdate + '</div> \
+                                        </div>';
+            }
+            if(todoRaw.stime != null){
 
-            var year = arrayDate[0];
-            var month= arrayDate[1];
-            var curdate = arrayDate[2];  */
+            }
+            if(todoRaw.edate != null){
 
-            //display the info in todo cards
-            todoList.innerHTML += "<div id='todo_card'><div class='todo_info'><div class='card_task'>"+todoRow.task+"</div><div class='card_Description'>"+todoRow.desc+"</div><div class='block'><div class='card_small_info'>Date: "+dateEntry+"</div><div class='card_small_info'>Tag: "+todoRow.tag+"</div></div></div><a href='javascript:void(0);' onclick='removeTodo(" + todoRow.idtodo + ");'><div class='delete_btn smooth'><div class='deletebtn smooth'></div></div></a></div>";
+            }
+            if(todoRaw.etime != null){
+
+            }
+            if(todoRaw.allday != null){
+
+            }
+            if(todoRaw.tag != null){
+
+            }
+            todoList.innerHTML += '<div class="todo-footer-block"> \
+                                        <div class="todo-footer-icons"> \
+                                            <a href="javascript:void(0);" onclick="removeTodo('+ todoRaw.todoID + ');"> \
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i> \
+                                            </a> \
+                                        </div> \
+                                    </div>';
+            */
+            
         }
     }
 }
 
-function removeTodo(idtodo){
+function removeTodo(todoID) {
     //check status of db available
-    if(db){
-        db.transaction(function(t){
-            t.executeSql("DELETE FROM todotb WHERE rowid=?", [idtodo], displayTodo);
+    if (db) {
+        db.transaction(function(t) {
+            t.executeSql("DELETE FROM todo_db WHERE todoID=?", [todoID], displayTodo);
         });
-    }
-    else{
-        alert("Something went wrong!");
+    } else {
+        console.log("ERROR DELETING TODO id:" + todoID);
     }
 }
-
 displayTodo();
