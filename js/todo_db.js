@@ -1,3 +1,7 @@
+//Import dependencies
+var $ = require('jquery');
+
+
 //connect the websql db
 if (window.openDatabase) {
     var db = openDatabase("tododb", "0.1", "todo_entry", 2 * 1024 * 1024);
@@ -13,18 +17,17 @@ if (window.openDatabase) {
                     edate     TEXT, \
                     etime     TEXT, \
                     allday    TEXT, \
-                    tag       TEXT \
-                    )");
+                    tag TEXT )");
 
         console.log("DB CREATED");
 
         //debug point for websql testing
         /* test entry >>*/
-
+        /*
         t.executeSql("INSERT INTO tododb (heading, desc, sdate, stime, edate, etime, allday, tag) \
                       VALUES ('testHead','desc','sdate','stime','edate','etime','allday','tag')");
         console.log("TEST DB CREATED");
-
+        */
 
     });
 } else {
@@ -49,7 +52,7 @@ function addTODO() {
         //debug point for output testing
         /*
         var test = document.getElementById("test");
-        test.innerHTML = todo_heading + " " + todo_desc; 
+        test.innerHTML = todo_heading + " " + todo_desc;
         */
 
         //check for header is available
@@ -77,8 +80,8 @@ function displayTodo() {
     if (db) {
         db.transaction(function(t) {
             // display data from the db
-            t.executeSql("SELECT * FROM tododb", [], refreshTodo);
-            //t.executeSql("SELECT * FROM todo_db ORDER BY sdate ASC", [], refreshTodo);
+            //t.executeSql("SELECT * FROM tododb", [], refreshTodo);
+            t.executeSql("SELECT * FROM tododb ORDER BY sdate ASC", [], refreshTodo);
         });
     } else {
         console.log("LIST DISPLAY ERROR");
@@ -88,7 +91,6 @@ function displayTodo() {
 //refresh the todo list
 function refreshTodo(transaction, results) {
     var todoList = document.getElementById("app-content");
-    var todoTask = '';
 
     //clear the todolist
     todoList.innerHTML = '';
@@ -101,10 +103,47 @@ function refreshTodo(transaction, results) {
         for (var i = 0; i < results.rows.length; i++) {
             var todoRaw = results.rows.item(i);
 
-            console.log(todoRaw.heading);
+            console.log(todoRaw.heading + ' ' + todoRaw.desc);
+            var todoTask = '';
 
-            todoList.innerHTML += 'Mahesh' + todoRaw.heading;
+            todoTask += '<div class="todo-wrapper"><div class="todo"><div class="todo-header"><div class="ring"></div>' + todoRaw.heading + '</div>';
 
+            if (todoRaw.desc != null) {
+                todoTask += '<div class="todo-content-blocks">' + todoRaw.desc + '</div>';
+            }
+
+            //open the footer
+            todoTask += '<div class="todo-footer">';
+
+            if (todoRaw.sdate != '') {
+                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todoRaw.sdate + '</div></div>';
+            }
+            if (todoRaw.stime != '') {
+                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todoRaw.stime + '</div></div>';
+            }
+            if (todoRaw.edate != '') {
+                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todoRaw.edate + '</div></div>';
+            }
+            if (todoRaw.etime != '') {
+                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todoRaw.etime + '</div></div>';
+            }
+            if (todoRaw.allday != '') {
+                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todoRaw.allday + '</div></div>';
+            }
+
+            //close the footer and delete button
+            todoTask += '<div class="todo-footer-block width-100"><div class="todo-footer-icons"><a href="javascript:void(0);" onclick="removeTodo(' + todoRaw.todoID + ');"> \
+                        <i class="fa fa-trash-o" aria-hidden="true"></i></a></div></div>';
+            todoTask += '</div>';
+
+            todoTask += '</div></div>';
+
+            todoList.innerHTML += todoTask;
         }
     }
 }

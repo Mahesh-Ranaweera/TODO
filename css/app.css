@@ -20,15 +20,14 @@
     top: 0;
     height: 100%;
     padding-top: 50px;
-    padding-left:  50px;
-    padding-right:  50px;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 50px;
     box-sizing: border-box;
     position: fixed;
     z-index: 100;
     overflow: auto;
 }
-
-
 
 .todo-wrapper {
     width: auto;
@@ -53,7 +52,7 @@
     height: auto;
     line-height: 40px;
     float: left;
-    color:  #34495e;
+    color: #34495e;
 }
 
 .ring {
@@ -70,14 +69,14 @@
     width: 100%;
     height: auto;
     float: left;
-    color:  #34495e;
+    color: #34495e;
 }
 
 .todo-footer {
     width: 100%;
     height: auto;
     float: left;
-    border-top: 1px solid #eee; 
+    border-top: 1px solid #eee;
 }
 
 .month-divider {
@@ -110,7 +109,7 @@
     width: 100%;
     height: 100%;
     position: fixed;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 700;
     display: none;
 }
@@ -124,7 +123,8 @@
     color: #2c3e50;
     cursor: pointer;
 }
-.exitbtn:hover{
+
+.exitbtn:hover {
     color: #34495e;
 }
 
@@ -182,7 +182,8 @@
     color: #ecf0f1;
     cursor: pointer;
 }
-.input-btn:hover{
+
+.input-btn:hover {
     background-color: #2980b9;
 }
 
@@ -191,8 +192,9 @@
 }
 
 .width-100 {
-    width: 50%;
+    width: 100%;
 }
+
 .width-50 {
     width: 50%;
 }
@@ -210,17 +212,16 @@
     color: #ecf0f1;
     cursor: pointer;
     z-index: 500;
-    -webkit-box-shadow: 0px 0px 16px 0px rgba(44,62,80,1);
--moz-box-shadow: 0px 0px 16px 0px rgba(44,62,80,1);
-box-shadow: 0px 0px 16px 0px rgba(44,62,80,1);
+    -webkit-box-shadow: 0px 0px 16px 0px rgba(44, 62, 80, 1);
+    -moz-box-shadow: 0px 0px 16px 0px rgba(44, 62, 80, 1);
+    box-shadow: 0px 0px 16px 0px rgba(44, 62, 80, 1);
 }
 
-#todo-add-btn:hover{
-    -webkit-box-shadow: 0px 5px 16px 0px rgba(44,62,80,1);
--moz-box-shadow: 0px 5px 16px 0px rgba(44,62,80,1);
-box-shadow: 0px 5px 16px 0px rgba(44,62,80,1);
+#todo-add-btn:hover {
+    -webkit-box-shadow: 0px 5px 16px 0px rgba(44, 62, 80, 1);
+    -moz-box-shadow: 0px 5px 16px 0px rgba(44, 62, 80, 1);
+    box-shadow: 0px 5px 16px 0px rgba(44, 62, 80, 1);
 }
-
 
 .todo-footer-icons {
     width: 32px;
@@ -228,7 +229,7 @@ box-shadow: 0px 5px 16px 0px rgba(44,62,80,1);
     float: left;
     line-height: 32px;
     text-align: center;
-    color:  #34495e;
+    color: #34495e;
 }
 
 .todo-footer-icon-lbl {
@@ -237,7 +238,7 @@ box-shadow: 0px 5px 16px 0px rgba(44,62,80,1);
     float: left;
     line-height: 32px;
     padding-right: 5px;
-    color:  #34495e;
+    color: #34495e;
 }
 
 .todo-footer-block {
