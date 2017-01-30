@@ -1,28 +1,30 @@
 //connect the websql db
 if (window.openDatabase) {
-    var db = openDatabase("todo_db", "0.1", "todo_entry", 2 * 1024 * 1024);
+    var db = openDatabase("tododb", "0.1", "todo_entry", 2 * 1024 * 1024);
 
     //start transactions
     db.transaction(function(t) {
-        t.executeSql("CREATE TABLE IF NOT EXISTS todo_db( \
-                  todoID INTEGER PRIMARY KEY AUTOINCREMENT, \
-                  heading   TEXT, \
-                  desc      TEXT, \
-                  sdate     TEXT, \
-                  stime     TEXT, \
-                  edate     TEXT, \
-                  etime     TEXT, \
-                  allday    TEXT, \
-                  tag       TEXT \
-                )");
+        t.executeSql("CREATE TABLE IF NOT EXISTS tododb ( \
+                    todoID INTEGER PRIMARY KEY ASC, \
+                    heading   TEXT, \
+                    desc      TEXT, \
+                    sdate     TEXT, \
+                    stime     TEXT, \
+                    edate     TEXT, \
+                    etime     TEXT, \
+                    allday    TEXT, \
+                    tag       TEXT \
+                    )");
 
         console.log("DB CREATED");
 
         //debug point for websql testing
+        /* test entry >>*/
 
-        t.executeSql("INSERT INTO todo_db (heading, desc, sdate, stime, edate, etime, allday, tag) \
-                      VALUES ('test','test','test','test','test','test','test','test')");
+        t.executeSql("INSERT INTO tododb (heading, desc, sdate, stime, edate, etime, allday, tag) \
+                      VALUES ('testHead','desc','sdate','stime','edate','etime','allday','tag')");
         console.log("TEST DB CREATED");
+
 
     });
 } else {
@@ -54,8 +56,8 @@ function addTODO() {
         if (todo_heading != '' && todo_sdate != '') {
             db.transaction(function(t) {
                 //insert the new todo entry into the database
-                t.executeSql("INSERT INTO todo_db (heading, desc, sdate, stime, edate, etime, allday, tag) \
-                              VALUES (?,?,?,?,?,?,?,?)", [todo_heading, todo_desc, todo_sdate, todo_stime, todo_edate, todo_etime, todo_allday, todo_tag]);
+                t.executeSql("INSERT INTO tododb (heading, desc, sdate, stime, edate, etime, allday, tag) \
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [todo_heading, todo_desc, todo_sdate, todo_stime, todo_edate, todo_etime, todo_allday, todo_tag]);
 
                 console.log("NEW TODO ENTRY");
 
@@ -65,7 +67,7 @@ function addTODO() {
             });
         } else {
             alert("YOU NEED TO HAVE A HEADING AND A START DATE");
-            console.log("INCOMPLETE SUBMIT")
+            console.log("INCOMPLETE SUBMIT");
         }
     }
 }
@@ -75,11 +77,11 @@ function displayTodo() {
     if (db) {
         db.transaction(function(t) {
             // display data from the db
-            t.executeSql("SELECT * FROM todo_db \
-                          ORDER BY sdate ASC", [], refreshTodo);
+            t.executeSql("SELECT * FROM tododb", [], refreshTodo);
+            //t.executeSql("SELECT * FROM todo_db ORDER BY sdate ASC", [], refreshTodo);
         });
     } else {
-        console.log("LIST DISPLAY ERROR")
+        console.log("LIST DISPLAY ERROR");
     }
 }
 
@@ -87,13 +89,9 @@ function displayTodo() {
 function refreshTodo(transaction, results) {
     var todoList = document.getElementById("app-content");
     var todoTask = '';
-    //delcaring todo html snippets
-    var cardHead = '<div class="todo-wrapper"><div class="todo">';
-    var cardFoot = '</div></div>';
 
     //clear the todolist
-    todoList.innerHTML = "";
-
+    todoList.innerHTML = '';
 
     //if data table is empty
     if (results.rows.length == 0) {
@@ -103,47 +101,9 @@ function refreshTodo(transaction, results) {
         for (var i = 0; i < results.rows.length; i++) {
             var todoRaw = results.rows.item(i);
 
-            //add heading
-            //todoList.innerHTML = todoList.innerHTML + '<div class="todo-wrapper"><div class="todo"><div class="todo-header"> \
-            //  <div class="ring"></div>' + todoRaw.heading + '</div>';
-
-            //todoList.innerHTML = todoList.innerHTML + '</div></div>';
             console.log(todoRaw.heading);
 
             todoList.innerHTML += 'Mahesh' + todoRaw.heading;
-
-            /*
-            if(todoRaw.sdate != null){
-                todoList.innerHTML += '<div class="todo-footer-block width-100"> \
-                                            <div class="todo-footer-icons"> \
-                                                <i class="fa fa-clock-o" aria-hidden="true"></i> \
-                                            </div> \
-                                            <div class="todo-footer-icon-lbl">' + todoRaw.sdate + '</div> \
-                                        </div>';
-            }
-            if(todoRaw.stime != null){
-
-            }
-            if(todoRaw.edate != null){
-
-            }
-            if(todoRaw.etime != null){
-
-            }
-            if(todoRaw.allday != null){
-
-            }
-            if(todoRaw.tag != null){
-
-            }
-            todoList.innerHTML += '<div class="todo-footer-block"> \
-                                        <div class="todo-footer-icons"> \
-                                            <a href="javascript:void(0);" onclick="removeTodo('+ todoRaw.todoID + ');"> \
-                                                <i class="fa fa-trash-o" aria-hidden="true"></i> \
-                                            </a> \
-                                        </div> \
-                                    </div>';
-            */
 
         }
     }
@@ -153,7 +113,7 @@ function removeTodo(todoID) {
     //check status of db available
     if (db) {
         db.transaction(function(t) {
-            t.executeSql("DELETE FROM todo_db WHERE todoID=?", [todoID], displayTodo);
+            t.executeSql("DELETE FROM tododb WHERE todoID=?", [todoID], displayTodo);
         });
     } else {
         console.log("ERROR DELETING TODO id:" + todoID);
