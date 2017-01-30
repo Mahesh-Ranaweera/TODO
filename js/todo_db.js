@@ -15,15 +15,15 @@ if (window.openDatabase) {
                   allday    TEXT, \
                   tag       TEXT \
                 )");
-        
+
         console.log("DB CREATED");
 
         //debug point for websql testing
-        /*
+
         t.executeSql("INSERT INTO todo_db (heading, desc, sdate, stime, edate, etime, allday, tag) \
                       VALUES ('test','test','test','test','test','test','test','test')");
         console.log("TEST DB CREATED");
-        */
+
     });
 } else {
     console.log("DB ERROR OCCURED");
@@ -36,7 +36,7 @@ function addTODO() {
     if (db) {
         //get input data from the submit form
         var todo_heading = document.getElementById("todo-header").value;
-        var todo_desc       = document.getElementById("todo-desc").value;
+        var todo_desc = document.getElementById("todo-desc").value;
         var todo_sdate = document.getElementById("todo-sdate").value;
         var todo_stime = document.getElementById("todo-stime").value;
         var todo_edate = document.getElementById("todo-edate").value;
@@ -55,12 +55,10 @@ function addTODO() {
             db.transaction(function(t) {
                 //insert the new todo entry into the database
                 t.executeSql("INSERT INTO todo_db (heading, desc, sdate, stime, edate, etime, allday, tag) \
-                              VALUES (?,?,?,?,?,?,?,?)", 
-                              [todo_heading, todo_desc, todo_sdate, todo_stime, todo_edate, todo_etime, todo_allday, todo_tag]
-                            );
-                
+                              VALUES (?,?,?,?,?,?,?,?)", [todo_heading, todo_desc, todo_sdate, todo_stime, todo_edate, todo_etime, todo_allday, todo_tag]);
+
                 console.log("NEW TODO ENTRY");
-                
+
                 //close the addtodo window and refresh the todolist
                 exitBtn("app-todoadd");
                 displayTodo();
@@ -92,10 +90,10 @@ function refreshTodo(transaction, results) {
     //delcaring todo html snippets
     var cardHead = '<div class="todo-wrapper"><div class="todo">';
     var cardFoot = '</div></div>';
-    
+
     //clear the todolist
     todoList.innerHTML = "";
-    
+
 
     //if data table is empty
     if (results.rows.length == 0) {
@@ -105,84 +103,15 @@ function refreshTodo(transaction, results) {
         for (var i = 0; i < results.rows.length; i++) {
             var todoRaw = results.rows.item(i);
 
-             //debug point for checking retrieve data
-            /*
-            todoList.innerHTML += todoRaw.heading;
-            */
-            todoTask = ''; 
-            todoTask = '<div class="todo-wrapper"><div class="todo"><div class="todo-header"><div class="ring"></div>'+todoRaw.heading+'</div>';
-            
-            if(todoRaw.desc != ''){
-                todoTask += '<div class="todo-content-blocks">' + todoRaw.desc + '</div>';
-            }
-            
-            //todo footer
-            todoTask += '<div class="todo-footer">';
-            
-            if(todoRaw.sdate != null){
-                todoTask += '<div class="todo-footer-block width-100"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i></div><div class="todo-footer-icon-lbl">' + todoRaw.sdate + todoRaw.stime;
-                if(todoRaw.stime != ''){
-                    todoTask += ' @ ' + todoRaw.stime;
-                }
-                todoTask += '</div></div>';
-            }
-            /*
-            if(todoRaw.edate != ''){
-                //todoTask
-            }
-            if(todoRaw.etime != ''){
-                //todoTask
-            }
-            if(todoRaw.allday != ''){
-                //todoTask
-            }
-            if(todoRaw.tag != ''){
-                //todoTask
-            } 
-            */
-            
-            //delete button
-            //todoTask += '<div class="todo-footer-block"><div class="todo-footer-icons"><a href="javascript:void(0);" onclick="removeTodo(' + todoRow.idtodo + ');"><i class="fa fa-trash-o" aria-hidden="true"></i></a></div></div>';
-            
-            //todo footer end
-            todoTask += '</div>';
-            
-            todoTask += '</div></div>';
-            
-            todoList.innerHTML += todoTask;
-            
-            
-            /*
-                                            <div class="todo-header"> \
-                                                <div class="ring"></div>'+todoRaw.heading+' \
-                                            </div> \
-                                            <div class="todo-content-blocks">Content</div> \
-                                            <div class="todo-footer"></div> \
-                                        </div> \
-                                    </div>';  */
-            
-            
-            /*
-            todoList.innerHTML += cardHead+'<div class="todo-header"><div class="ring"></div>'+todoRaw.heading+'</div>';
-            
-            if(todoRaw.desc != null){
-                todoList.innerHTML += '<div class="todo-content-blocks">' + todoRaw.desc + '</div>';
-            }
-            
-            todoList.innerHTML += '<div class="todo-footer"></div>';
-            
-            todoList.innerHTML += cardFoot; */
-            
-            /*
-            
-                <div class="todo-content-blocks">Content</div> \
-                <div class="todo-footer"></div>'+cardFoot;
-            
-            */
-            
-            
-            
-            
+            //add heading
+            //todoList.innerHTML = todoList.innerHTML + '<div class="todo-wrapper"><div class="todo"><div class="todo-header"> \
+            //  <div class="ring"></div>' + todoRaw.heading + '</div>';
+
+            //todoList.innerHTML = todoList.innerHTML + '</div></div>';
+            console.log(todoRaw.heading);
+
+            todoList.innerHTML += 'Mahesh' + todoRaw.heading;
+
             /*
             if(todoRaw.sdate != null){
                 todoList.innerHTML += '<div class="todo-footer-block width-100"> \
@@ -215,7 +144,7 @@ function refreshTodo(transaction, results) {
                                         </div> \
                                     </div>';
             */
-            
+
         }
     }
 }
