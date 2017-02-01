@@ -1,5 +1,13 @@
 //Import dependencies
 var $ = require('jQuery');
+//global data
+var curr_date = new Date();
+
+var curr_year = curr_date.getFullYear();
+var curr_month = curr_date.getMonth() + 1;
+var curr_day = curr_date.getDate();
+
+//console.log(curr_year, curr_day, curr_month);
 
 
 //connect the websql db
@@ -38,31 +46,20 @@ function addTODO() {
         var todo_stime = document.getElementById("todo-stime").value;
         var todo_edate = document.getElementById("todo-edate").value;
         var todo_etime = document.getElementById("todo-etime").value;
-        var todo_tag = document.getElementById("todo-tag").value;
+        var todo_tag = document.getElementsByName("tag-color");
 
-        //debug point for output testing
-        /*
-        var test = document.getElementById("test");
-        test.innerHTML = todo_heading + " " + todo_desc;
-        */
-
-        //tag color declaration
         var color_tag;
-
         //Tags 
-        switch (todo_tag) {
-            case (todo_tag == 'WORK' || todo_tag == 'work'):
-                color_tag = '#242424';
+        for (var i = 0, length = todo_tag.length; i < length; i++) {
+            if (todo_tag[i].checked) {
+                // get the tag color and apply it to the div on render
+                color_tag = todo_tag[i].value;
+                console.log(color_tag);
                 break;
-            case (todo_tag == 'SCHOOL' || todo_tag == 'school'):
-                color_tag = '#2196F3';
-                break;
-            default:
-                color_tag = '#2196F3';
+            }
         }
-
         //check for header is available
-        if (todo_heading != '' && todo_sdate != '') {
+        if (todo_heading != '' && todo_sdate != '' && todo_edate != '') {
             db.transaction(function(t) {
                 //insert the new todo entry into the database
                 t.executeSql("INSERT INTO tododb (heading, desc, sdate, stime, edate, etime, tag) \
@@ -75,7 +72,7 @@ function addTODO() {
                 displayTodo();
             });
         } else {
-            alert("YOU NEED TO HAVE A HEADING AND A START DATE");
+            alert("YOU NEED TO HAVE A HEADING, A START DATE AND A END DATE");
             console.log("INCOMPLETE SUBMIT");
         }
     }
@@ -93,6 +90,7 @@ function displayTodo() {
     }
 }
 
+
 //refresh Todo list with new data
 function refreshTodo(transaction, results) {
     var todoList = document.getElementById("app-content");
@@ -106,46 +104,87 @@ function refreshTodo(transaction, results) {
         console.log("DB EMPTY");
     } else {
         for (var i = 0; i < results.rows.length; i++) {
-            var todoRaw = results.rows.item(i);
+            var todoRow = results.rows.item(i);
 
-            //console.log(todoRaw.heading + ' ' + todoRaw.desc);
-            var todoTask = '';
+            var sdate_init = todoRow.sdate;
+            var edate_init = todoRow.edate;
 
-            todoTask += '<div class="todo-wrapper"><div class="todo" style="background-color: ' + todoRaw.tag + ' !important"><div class="todo-header"><div class="ring"></div>' + todoRaw.heading + '</div>';
+            var sdate_arr = sdate_init.split('-');
+            var edate_arr = edate_init.split('-');
 
-            if (todoRaw.desc != null) {
-                todoTask += '<div class="todo-content-blocks">' + todoRaw.desc + '</div>';
+            //get the year
+            var syear = parseInt(sdate_arr[0]);
+            var eyear = parseInt(edate_arr[0]);
+            //get the month
+            var smonth = parseInt(sdate_arr[1]);
+            var emonth = parseInt(edate_arr[1]);
+            //get the date
+            var sday = parseInt(sdate_arr[2]);
+            var eday = parseInt(edate_arr[2]);
+
+            console.log(sday + '_' + curr_day, smonth + '_' + curr_month, syear + '_' + curr_year, eday, emonth, eyear)
+
+            //check for date and delete if expired
+            if (eyear < curr_year) {
+                deleteOldTodo(todoRow.todoID);
+            } else if (emonth < curr_month && eyear == curr_year) {
+                deleteOldTodo(todoRow.todoID);
+            } else {
+                todoList.innerHTML += formatCard(todoRow.todoID, todoRow.heading, todoRow.desc, todoRow.sdate, todoRow.stime, todoRow.edate, todoRow.etime, todoRow.tag);
             }
 
-            //open the footer
-            todoTask += '<div class="todo-footer">';
+            //todoList.innerHTML += formatCard(todoRow.todoID, todoRow.heading, todoRow.desc, todoRow.sdate, todoRow.stime, todoRow.edate, todoRow.etime, todoRow.tag);
 
-            if (todoRaw.sdate != '') {
-                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
-                        </div><div class="todo-footer-icon-lbl">' + todoRaw.sdate + '</div></div>';
-            }
-            if (todoRaw.stime != '') {
-                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
-                        </div><div class="todo-footer-icon-lbl">' + todoRaw.stime + '</div></div>';
-            }
-            if (todoRaw.edate != '') {
-                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
-                        </div><div class="todo-footer-icon-lbl">' + todoRaw.edate + '</div></div>';
-            }
-            if (todoRaw.etime != '') {
-                todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
-                        </div><div class="todo-footer-icon-lbl">' + todoRaw.etime + '</div></div>';
-            }
-
-            //close the footer and delete button
-            todoTask += '<div class="todo-footer-block width-100"><div class="todo-footer-icons"><a href="javascript:void(0);" onclick="removeTodo(' + todoRaw.todoID + ');"> \
-                        <i class="fa fa-trash-o" aria-hidden="true"></i></a></div></div>';
-            todoTask += '</div>';
-
-            todoTask += '</div></div>';
-
-            todoList.innerHTML += todoTask;
         }
+    }
+}
+
+function formatCard(todoid, todoheading, tododesc, todosdate, todostime, todoedate, todoetime, todotag) {
+    var todoTask = '';
+
+    todoTask += '<div class="todo-wrapper"><div class="todo" style="background-color: ' + todotag + ' !important; color: #34495e;"><div class="todo-header"><div class="ring"></div>' + todoheading + '</div>';
+
+    if (tododesc != null) {
+        todoTask += '<div class="todo-content-blocks">' + tododesc + '</div>';
+    }
+
+    //open the footer
+    todoTask += '<div class="todo-footer">';
+
+    if (todosdate != '') {
+        todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todosdate + '</div></div>';
+    }
+    if (todostime != '') {
+        todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todostime + '</div></div>';
+    }
+    if (todoedate != '') {
+        todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todoedate + '</div></div>';
+    }
+    if (todoetime != '') {
+        todoTask += '<div class="todo-footer-block width-50"><div class="todo-footer-icons"><i class="fa fa-clock-o" aria-hidden="true"></i> \
+                        </div><div class="todo-footer-icon-lbl">' + todoetime + '</div></div>';
+    }
+
+    //close the footer and delete button
+    todoTask += '<div class="todo-footer-block width-100"><div class="todo-footer-icons"><a href="javascript:void(0);" onclick="removeTodo(' + todoid + ');"> \
+                        <i class="fa fa-trash-o" aria-hidden="true"></i></a></div></div>';
+    todoTask += '</div>';
+
+    todoTask += '</div></div>';
+
+    return todoTask;
+}
+
+//Delete expired entry
+function deleteOldTodo(todoID) {
+    if (db) {
+        db.transaction(function(t) {
+            t.executeSql("DELETE FROM tododb WHERE todoID=?", [todoID]);
+            console.log("DELETED OLD TODO ENTRY " + todoID);
+        });
     }
 }
 
@@ -153,10 +192,15 @@ function refreshTodo(transaction, results) {
 function removeTodo(todoID) {
     //check status of db available
     if (db) {
-        db.transaction(function(t) {
-            t.executeSql("DELETE FROM tododb WHERE todoID=?", [todoID], displayTodo);
-            alert("DELETED");
-        });
+        var msg = confirm("DO YOU WANT TO DELETE");
+        if (msg == true) {
+            db.transaction(function(t) {
+                t.executeSql("DELETE FROM tododb WHERE todoID=?", [todoID], displayTodo);
+            });
+        } else {
+            return;
+        }
+
     } else {
         console.log("ERROR DELETING TODO id:" + todoID);
     }

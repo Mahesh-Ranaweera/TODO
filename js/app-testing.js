@@ -1,3 +1,15 @@
+//Global data
+var curr_date = new Date();
+//create current date 
+var curr_str = curr_date.getFullYear() + "-" +
+    ('0' + (curr_date.getMonth() + 1)).slice(-2) + "-" +
+    ('0' + curr_date.getDate()).slice(-2);
+
+//create future date (one month gap)
+var past_str = curr_date.getFullYear() + "-" +
+    ('0' + (curr_date.getMonth() + 2)).slice(-2) + "-" +
+    ('0' + curr_date.getDate()).slice(-2);
+
 //APP test
 //Test functions of the TODO app {test cases}
 function apptest() {
@@ -104,9 +116,9 @@ function test_pop_db() {
 
     var heading = "TEST ENTRY HEADING" + index;
     var desc = "TEST DESC";
-    var sdate = "2017-02-02";
+    var sdate = curr_str;
     var stime = "12:00";
-    var edate = "2017-02-03";
+    var edate = past_str;
     var etime = "01:00";
     var tag = "#FFFFFF";
 
