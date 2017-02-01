@@ -100,7 +100,7 @@ function refreshTodo(transaction, results) {
 
     //if data table is empty
     if (results.rows.length == 0) {
-        todoList.innerHTML = "EMPTY";
+        todoList.innerHTML = '<div class="loney-msg"><i class="fa fa-quote-left" aria-hidden="true"></i>It\'s loney out here, add some tasks<i class="fa fa-quote-right" aria-hidden="true"></i></div>';
         console.log("DB EMPTY");
     } else {
         for (var i = 0; i < results.rows.length; i++) {
