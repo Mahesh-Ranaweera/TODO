@@ -17,7 +17,7 @@ function createWindow() {
     win = new BrowserWindow({
         width: 960,
         height: 600,
-        title: 'TodoApp',
+        title: 'todoapp',
         icon: 'assets/img/logo.png', //custom logo location
         resizable: false
     });
@@ -29,7 +29,7 @@ function createWindow() {
     //win.loadURL(`http://www.mi6softlab.com/`);
 
     // Open the DevTools.
-    win.webContents.openDevTools();
+    //win.webContents.openDevTools();
 
     // Emitted when the window is closed.
     win.on('closed', () => {

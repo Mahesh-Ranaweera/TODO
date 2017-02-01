@@ -54,7 +54,7 @@ function addTODO() {
             if (todo_tag[i].checked) {
                 // get the tag color and apply it to the div on render
                 color_tag = todo_tag[i].value;
-                console.log(color_tag);
+                //console.log(color_tag);
                 break;
             }
         }

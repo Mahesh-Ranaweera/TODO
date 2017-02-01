@@ -1,0 +1,14 @@
+/*roboto font embed*/
+
+@font-face {
+    font-family: "Inconsolata";
+    font-style: normal;
+    font-weight: 200;
+    src: local('../assets/font/Inconsolata-Bold'), local('../assets/font/Inconsolata-Regular'), url("../assets/font/Inconsolata-Bold.ttf") format('truetype');
+}
+@font-face {
+    font-family: "Inconsolata";
+    font-style: bold;
+    font-weight: 300;
+    src: local('../assets/font/Inconsolata-Regular'), local('../assets/font/Inconsolata-Regular'), url("../assets/font/Inconsolata-Regular.ttf") format('truetype');
+}
