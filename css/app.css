@@ -18,15 +18,17 @@
     left: 0;
     right: 0;
     top: 0;
-    height: 100%;
+    bottom: 0;
+    min-height: 100%;
+    height: 600px;
     padding-top: 50px;
     padding-left: 50px;
     padding-right: 50px;
     padding-bottom: 50px;
     box-sizing: border-box;
-    position: fixed;
     z-index: 100;
     overflow: auto;
+    float: left;
 }
 
 .todo-wrapper {
@@ -149,7 +151,7 @@
 .todo-textarea {
     max-width: 100%;
     width: 100%;
-    max-height: 50px;
+    height: 100px;
     border-style: none;
     box-sizing: border-box;
     line-height: 20px;
@@ -245,7 +247,6 @@
     height: 32px;
     float: left;
 }
-
 
 .radio-wrapper {
     width: auto;

@@ -1,32 +1,35 @@
-# Electron quick app dev files
-Electron quick app dev files
+## TODO
+### Simple TODO app developed for Software Quality 3980U
 
-<table>
-  <tr>
-    <td>file/folder</td> <td>description</td>
-  <tr>
-  <tr>
-    <td>main.html</td> <td>basic html for quick start</td>
-  <tr>
-  <tr>
-    <td>main.js</td> <td>electron app files</td>
-  <tr>
-  <tr>
-    <td>package.json</td> <td>electron app files</td>
-  <tr>
-  <tr>
-    <td>folder > js</td> <td>jquery-3.0.0</td>
-  <tr>
-    <tr>
-    <td>folder > css</td> <td><ol><li>main.css</li><li>font.css: roboto font embed</li></ol></td>
-  <tr>
-  <tr>
-    <td>folder > assets</td> <td><ol><li>folder > img</li><li>folder > svg</li> <li>folder > fonts:include roboto font</li></ol></td>
-  <tr>
-</table>
+---
 
+* Features:
+  * allow to add color tags
+  * web application : uses websql to store data
+  * console application test implemented: to open console
 
-ignored node_modules and build folders
+  ```
+  > Ctrl+Shift + I
+  > to see predefined functions: apptest()
 
-To add node_modules gitbash on the app page : type <code>npm electron-prebuilt --save-dev</code>   
-[need <a href="https://nodejs.org/en/">node.js</a> or <a href="https://iojs.org/en/">io.js</a> installed for npm]
+  AVAILABLE TESTS >
+  1. SHOW DB:           test_show_db()
+  2. CREATE_DB:         test_create_db()
+  3. DROP_DB:           test_drop_db()
+  4. POPULATE DB:       test_pop_db()
+  5. CUSTOM DATA ENTRY: test_add_todo() {require to enter: heading = '', desc = '', sdate = 'YYYY-MM-DD', stime = 'HH:MM', edate = 'YYYY-MM-DD', etime = 'HH:MM', tag = '#000000' }
+  6. DELETE ENTRY:      test_del_entry() {require to enter: todo_id = ''}
+  ```
+
+#### In order to run
+```
+> git clone "https://github.com/Mahesh-Ranaweera/TODO"
+> cd TODO
+> npm electron-prebuilt --save-dev
+> npm start
+
+--- To build
+
+> npm build
+```
+

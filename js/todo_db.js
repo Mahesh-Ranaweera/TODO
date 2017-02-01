@@ -122,7 +122,7 @@ function refreshTodo(transaction, results) {
             var sday = parseInt(sdate_arr[2]);
             var eday = parseInt(edate_arr[2]);
 
-            console.log(sday + '_' + curr_day, smonth + '_' + curr_month, syear + '_' + curr_year, eday, emonth, eyear)
+            //console.log(sday + '_' + curr_day, smonth + '_' + curr_month, syear + '_' + curr_year, eday, emonth, eyear)
 
             //check for date and delete if expired
             if (eyear < curr_year) {
