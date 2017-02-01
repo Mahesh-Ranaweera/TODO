@@ -1,4 +1,6 @@
-$(document).ready(function () {
+var $ = require('jQuery');
+
+$(document).ready(function() {
     $('.app-content').masonry({
         itemSelector: '.todo-wrapper',
         columnWidth: '.todo-wrapper',

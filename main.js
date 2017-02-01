@@ -25,7 +25,7 @@ function createWindow() {
     win.setMenuBarVisibility(false);
 
     // and load the index.html of the app.
-    win.loadURL(`file://${__dirname}/main.html`);
+    win.loadURL(`file://${__dirname}/app.html`);
     //win.loadURL(`http://www.mi6softlab.com/`);
 
     // Open the DevTools.
