@@ -3,6 +3,14 @@
 
 ---
 
+![alt text][window]
+[window]: https://github.com/Mahesh-Ranaweera/TODO/blob/master/screenshots/screenshot.png "TODO MAIN WINDOW"
+
+![alt text][test]
+[test]: https://github.com/Mahesh-Ranaweera/TODO/blob/master/screenshots/unittest.png "UNIT TESTING"
+
+---
+
 * Features:
   * allow to add color tags
   * web application : uses websql to store data
