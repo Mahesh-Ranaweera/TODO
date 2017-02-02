@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . todoapp --overwrite --platform=win32 --arch=all --icon=assets/img/logo.png.icns --out=build"
+    "build-win": "electron-packager . todoapp --overwrite --platform=win32 --arch=all --icon=assets/img/logo.png.icns --out=build",
+    "build-linux": "electron-packager . todoapp --overwrite --platform=linux --arch=all --icon=assets/img/logo.png.icns --out=build"
   },
   "author": "Mahesh Ranaweera",
   "license": "ISC",
